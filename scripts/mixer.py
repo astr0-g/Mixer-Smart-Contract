@@ -1,25 +1,14 @@
-input_string = "0x9fdA5BBBCEAdc9D0FAe1Ba20f870D363596320A1"
-n_parts = 9
+def getPart(address):
+    addr = address[2:]  # Remove the "0x" prefix
 
-# Remove the '0x' prefix
-input_string = input_string[2:]
+    x = addr[0:1]
+    r = addr[1:5]
+    w = addr[5:9]
+    z = addr[9:13]
+    s = addr[13:17]
+    v = addr[17:21]
+    y = addr[21:25]
+    u = addr[25:29]
+    t = addr[29:]  # Adjust this line to capture the remaining characters
 
-# Calculate the length of each part
-part_length = len(input_string) // n_parts
-remainder = len(input_string) % n_parts
-
-# Split the string into parts
-parts = []
-start = 0
-for i in range(n_parts):
-    length = part_length + (1 if i < remainder else 0)
-    end = start + length
-    parts.append(input_string[start:end])
-    start = end
-
-# Rearrange the parts according to the specified order
-new_order = [6, 0, 5, 8, 1, 4, 7, 3, 2]
-ordered_parts = [parts[i - 1] for i in new_order]
-
-# Print the result
-print(ordered_parts)
+    return r, s, t, u, v, w, x, y, z
