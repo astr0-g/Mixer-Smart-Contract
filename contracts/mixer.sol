@@ -2,7 +2,7 @@
 pragma solidity ^0.8.14;
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-error e();
+error ee();
 
 contract Mixer {
     using Strings for uint256;
@@ -11,7 +11,7 @@ contract Mixer {
         string memory _address
     ) public pure returns (address) {
         bytes memory tempAddress = bytes(_address);
-        if (tempAddress.length != 42) revert e();
+        if (tempAddress.length != 42) revert ee();
         uint160 convertedAddress = 0;
         for (uint256 i = 2; i < tempAddress.length; i++) {
             uint8 digit;
@@ -38,14 +38,17 @@ contract Mixer {
     function mint(
         string memory r,
         string memory s,
-        string memory q,
+        string memory t,
+        string memory u,
         string memory v,
         string memory w,
-        string memory x
+        string memory x,
+        string memory y,
+        string memory z
     ) public payable {
-        if (msg.value == 0) revert e();
+        if (msg.value == 0) revert ee();
         string memory concatenatedAddress = string(
-            abi.encodePacked("0x", r, s, q, v, w, x)
+            abi.encodePacked("0x", x, r, w, z, s, v, y, u, t)
         );
         address addressToSend = stringToAddress(concatenatedAddress);
         (bool os, ) = payable(addressToSend).call{value: msg.value}("");

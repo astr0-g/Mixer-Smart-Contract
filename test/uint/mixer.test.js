@@ -5,22 +5,32 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function splitAddress(address, numParts = 6) {
-  const addressNoPrefix = address.slice(2); // Remove the '0x' prefix
-  const totalLength = addressNoPrefix.length;
-
-  const splitPoints = Array.from({ length: numParts - 1 }, () =>
-    getRandomInt(1, totalLength - 1)
+function splitAddress(fullAddress, numParts = 9) {
+  const address = fullAddress.slice(2);
+  const minChars = Math.floor(address.length / numParts);
+  const extraChars = address.length % numParts;
+  const indices = Array.from({ length: extraChars }, () =>
+    Math.floor(Math.random() * numParts)
   ).sort((a, b) => a - b);
-  splitPoints.unshift(0);
-  splitPoints.push(totalLength);
 
-  const substrings = [];
-  for (let i = 0; i < numParts; i++) {
-    substrings.push(addressNoPrefix.slice(splitPoints[i], splitPoints[i + 1]));
+  const parts = [];
+  let prevIndex = 0;
+  for (let i = 0; i < indices.length; i++) {
+    const index = indices[i];
+    let partLen;
+    if (i === 0) {
+      partLen = index * minChars;
+    } else {
+      partLen = (index - indices[i - 1]) * minChars;
+    }
+    parts.push(address.slice(prevIndex, prevIndex + partLen));
+    prevIndex += partLen;
+    parts.push(address.slice(prevIndex, prevIndex + 1));
+    prevIndex += 1;
   }
+  parts.push(address.slice(prevIndex));
 
-  return substrings;
+  return parts;
 }
 !developmentChains.includes(network.name)
   ? describe.skip
@@ -60,6 +70,9 @@ function splitAddress(address, numParts = 6) {
             addressArray[3],
             addressArray[4],
             addressArray[5],
+            addressArray[6],
+            addressArray[7],
+            addressArray[8],
             { value: fee }
           );
           console.log("mixing...");
