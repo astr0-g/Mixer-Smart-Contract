@@ -37,12 +37,12 @@ module.exports = {
   },
   networks: {
     polygon: {
-      url: "https://polygon-mainnet.infura.io/v3/be819d15039f41ca9e45081e212d1c9a", //
+      url: "", //
       accounts: [RINKEBY_PRIVATE_KEY],
       chainId: 137,
     },
     mumbai: {
-      url: "https://polygon-mumbai.g.alchemy.com/v2/KhO9Yy5q0IngUt5Ywg8-Flz5VbSPM0ym", //
+      url: "", //
       accounts: [RINKEBY_PRIVATE_KEY],
       chainId: 80001,
     },
