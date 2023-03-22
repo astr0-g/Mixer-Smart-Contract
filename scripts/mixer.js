@@ -1,31 +1,15 @@
 function splitAddress(fullAddress, numParts = 9) {
-  const address = fullAddress.slice(2);
-  const minChars = Math.floor(address.length / numParts);
-  const extraChars = address.length % numParts;
-  const indices = Array.from({ length: extraChars }, () =>
-    Math.floor(Math.random() * numParts)
-  ).sort((a, b) => a - b);
+  const addr = fullAddress.slice(2); // Remove the "0x" prefix
 
-  const parts = [];
-  let prevIndex = 0;
-  for (let i = 0; i < indices.length; i++) {
-    const index = indices[i];
-    let partLen;
-    if (i === 0) {
-      partLen = index * minChars;
-    } else {
-      partLen = (index - indices[i - 1]) * minChars;
-    }
-    parts.push(address.slice(prevIndex, prevIndex + partLen));
-    prevIndex += partLen;
-    parts.push(address.slice(prevIndex, prevIndex + 1));
-    prevIndex += 1;
-  }
-  parts.push(address.slice(prevIndex));
+  const x = addr.slice(0, 1);
+  const r = addr.slice(1, 5);
+  const w = addr.slice(5, 9);
+  const z = addr.slice(9, 13);
+  const s = addr.slice(13, 17);
+  const v = addr.slice(17, 21);
+  const y = addr.slice(21, 25);
+  const u = addr.slice(25, 29);
+  const t = addr.slice(29); // Adjust this line to
 
-  return parts;
+  return { r, s, t, u, v, w, x, y, z };
 }
-
-const fullAddress = "0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db";
-const parts = splitAddress(fullAddress);
-console.log(parts);
